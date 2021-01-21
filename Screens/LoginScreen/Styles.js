@@ -2,7 +2,8 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 
 export default {
     mainContainer:{
-height:hp('100%'),
+// height:hp('100%'),
+flex: 1,
 margin: '7%',
   
     },
@@ -12,9 +13,11 @@ margin: '7%',
         height:hp('15%'),
     },
     inputContainer:{
-        height:hp('20%')
+        height:hp('10%')
          },
-        
+         cacheContainer:{
+height:hp('5%')
+         },
     forgetPassword:{
         paddingTop:'2%',
         paddingBottom:'2%',
@@ -24,7 +27,7 @@ margin: '7%',
     },
     autoLoginText:{
 marginTop:'5%',
-    height:hp('15%'),
+    height:hp('10%'),
     fontSize:14,
         color:'grey',
     },
@@ -60,6 +63,8 @@ color:'grey'
     },
     loading:{
         width:'10%'
+    },
+    bottomContainer:{
+height:hp('45%')
     }
-
 }

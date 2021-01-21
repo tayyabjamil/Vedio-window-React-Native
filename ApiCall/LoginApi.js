@@ -6,18 +6,18 @@ import Constant from '../Common/Constants'
 const loginApi = (data,response) => {
 
 
- return axios.post(Constant.domain + Constant.SigninEndPoint, {
-    "username": data.usernameText,
+ return axios.post(Constant.domain + Constant.LoginEndPoint, {
+    "email": data.usernameText,
     "password": data.passwordText,
    })
     .then(function (response) {
 
-      if (response.data.code === 200) {
-        let dataModel = new AccountModel(response.data.data)
+      if (response) {
+        // let dataModel = new AccountModel(response.data.data)
         let apiResult = new ApiResultModel(
-          response.data.code, 
+          // response.data.code, 
           response.data.message,
-          dataModel
+          // dataModel
           )
        return apiResult
       }

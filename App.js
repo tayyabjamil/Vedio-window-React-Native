@@ -5,7 +5,7 @@ import LoginScreen from './Screens/LoginScreen/LoginScreen'
 
 const App= () => {
   return (
-<SafeAreaView>
+<SafeAreaView style={{flex: 1}}>
 <LoginScreen />
 </SafeAreaView>
     )

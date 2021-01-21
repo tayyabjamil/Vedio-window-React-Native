@@ -1,5 +1,6 @@
 const Constants = {
-    domain : '',
+    domain : 'https://manage-dev.videowindow.com/api/',
+    LoginEndPoint:'apilogin',
     username:'username',
     password:'password',
     
