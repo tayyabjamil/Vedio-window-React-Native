@@ -76,11 +76,11 @@ import com.android.build.OutputFile
  *   extraPackagerArgs: []
  * ]
  */
-
 project.ext.react = [
+    entryFile: "index.js",
+    bundleAssetName: "app.bundle",
     enableHermes: false,  // clean and rebuild if changing
 ]
-
 apply from: "../../node_modules/react-native/react.gradle"
 
 /**
