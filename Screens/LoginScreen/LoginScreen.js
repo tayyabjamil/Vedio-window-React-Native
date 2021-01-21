@@ -94,11 +94,11 @@ export default class LoginScreen extends Component {
             </View>
           </View>
           <Text style={Styles.forgetPassword}>Forgot Password ?</Text>
-          <CheckBoxLogin checkBoxLabel={'Remember Login and Settings'} />
+          <CheckBoxLogin checkBoxLabel={'Remember Login '} />
           <CheckBoxLogin checkBoxLabel={'Auto-Login'} />
           <View style={Styles.cacheContainer}>
             <View style={Styles.flex}>
-              <View style={Styles.checkBox}>
+              <View style={Styles.cacheImage}>
                 <Image source={require('../../assets/images/cache.png')} />
               </View>
               <Text style={Styles.cacheLabel}>Clear cache</Text>
@@ -113,7 +113,7 @@ export default class LoginScreen extends Component {
             <Text style={Styles.underline}> Click here </Text>
             <Text>to cancel auto login</Text>
           </Text>
-          <ButtonConnect btnLabel={'Connect'} data={this.handleSubmit} />
+          <ButtonConnect btnLabel={'Connect'} navigation={this.props.navigation} data={this.handleSubmit} />
           <Text style={Styles.autoLoginText}>
             <Text>Dont have an account ? </Text>
             <Text style={Styles.textCreate}>Create</Text>

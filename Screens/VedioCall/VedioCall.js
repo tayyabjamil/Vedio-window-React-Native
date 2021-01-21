@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { ActionSheetIOS, View } from 'react-native';
 import JitsiMeet, { JitsiMeetView } from 'react-native-jitsi-meet';
 
 class VideoCall extends React.Component {
@@ -11,15 +11,20 @@ class VideoCall extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      const url = 'https://your.jitsi.server/roomName'; // can also be only room name and will connect to jitsi meet servers
-      const userInfo = { displayName: 'User', email: 'user@example.com', avatar: 'https:/gravatar.com/avatar/abc123' };
-      JitsiMeet.call(url, userInfo);
-      /* You can also use JitsiMeet.audioCall(url) for audio only call */
-      /* You can programmatically end the call with JitsiMeet.endCall() */
-    }, 1000);
+  //   setTimeout(() => {
+  //     const url = 'https://your.jitsi.server/roomName'; // can also be only room name and will connect to jitsi meet servers
+  //     const userInfo = { displayName: 'User', email: 'user@example.com', avatar: 'https:/gravatar.com/avatar/abc123' };
+  //     JitsiMeet.call(url, userInfo);
+  //     /* You can also use JitsiMeet.audioCall(url) for audio only call */
+  //     /* You can programmatically end the call with JitsiMeet.endCall() */
+  //   }, 1000);
+  // this.goToCallExperience()
   }
-
+  goToCallExperience(){  
+   
+    JitsiMeet.endCall() 
+   
+    }
   onConferenceTerminated(nativeEvent) {
     /* Conference terminated event */
   }
@@ -34,8 +39,12 @@ class VideoCall extends React.Component {
 
   render() {
     return (
-      <View style={{ backgroundColor: 'black',flex: 1 }}>
-        <JitsiMeetView onConferenceTerminated={this.onConferenceTerminated} onConferenceJoined={this.onConferenceJoined} onConferenceWillJoin={this.onConferenceWillJoin} style={{ flex: 1, height: '100%', width: '100%' }} />
+      <View style={{ flex: 1 }}>
+        <JitsiMeetView 
+         onConferenceTerminated={this.onConferenceTerminated}
+         onConferenceJoined={this.onConferenceJoined} 
+         onConferenceWillJoin={this.onConferenceWillJoin} 
+         style={{ flex: 1, height: '100%', width: '100%' }} />
       </View>
     );
   }

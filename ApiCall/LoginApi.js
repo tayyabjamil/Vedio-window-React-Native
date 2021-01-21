@@ -13,11 +13,8 @@ const loginApi = (data,response) => {
     .then(function (response) {
 
       if (response) {
-        // let dataModel = new AccountModel(response.data.data)
         let apiResult = new ApiResultModel(
-          // response.data.code, 
           response.data.message,
-          // dataModel
           )
        return apiResult
       }

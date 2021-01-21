@@ -3,7 +3,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 export default {  
     btnView:{
         height:hp('10%'),
-
+        marginTop:'5%',
     width:wp('33%'),
     },
     btnContainer:{

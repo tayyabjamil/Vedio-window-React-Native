@@ -27,7 +27,7 @@ height:hp('5%')
     },
     autoLoginText:{
 marginTop:'5%',
-    height:hp('10%'),
+    height:hp('5%'),
     fontSize:14,
         color:'grey',
     },
@@ -46,9 +46,10 @@ marginTop:'5%',
     flex:{
         flexDirection:'row',
     },
-    cacheLabel:{
-marginLeft:'5%'
+    cacheImage:{
+        width:wp('12%'),
     },
+  
     input:{
        marginBottom:'5%',  
         borderBottomWidth:2,
