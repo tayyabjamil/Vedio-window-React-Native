@@ -1,34 +1,39 @@
 
 
-import * as React from 'react';
+// import * as React from 'react';
 
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack'
-import { createDrawerNavigator } from 'react-navigation-drawer';
-import LoginScreen from '../Screens/LoginScreen/LoginScreen'
-import VedioCallScreen from '../Screens/VedioCall/VedioCall'
-const AccountNavigator = createStackNavigator({  
-    LoginScreen :{
-            screen:LoginScreen,
-            navigationOptions:{
-                headerShown: false,  
+// import { createAppContainer } from 'react-navigation';
+// import { createStackNavigator } from 'react-navigation-stack'
+// import { createDrawerNavigator } from 'react-navigation-drawer';
+// import LoginScreen from '../Screens/LoginScreen/LoginScreen'
+// import HomeScreen from '../Screens/HomeScreen/HomeScreen'
+// import AsyncStorage from '@react-native-community/async-storage'
+
+
+// const AccountNavigator = createStackNavigator({  
+//     LoginScreen :{
+//             screen:LoginScreen,
+//             navigationOptions:{
+//                 headerShown: false,  
               
-            } 
-        },
-    })            
-    const CallNavigator = createStackNavigator({  
-            vedioCall:{
-                screen:VedioCallScreen,
-                navigationOptions:{
-                    headerShown: false,
+//             } 
+//         },
+//     })            
+//     const HomeNavigator = createStackNavigator({  
+//             HomeScreen:{
+//                 screen:HomeScreen,
+//                 navigationOptions:{
+//                     headerShown: false,
                   
-                }
-            },
-        })            
-                  
-const MainNavigator = createDrawerNavigator({
-    Account:AccountNavigator,
-    VedioCall:CallNavigator,
+//                 }
+//             },
+//         })            
+        
+                 
+// const MainNavigator = createDrawerNavigator({
     
-})
-export default createAppContainer(MainNavigator)
+//     Account:AccountNavigator,
+//     Home:HomeNavigator,
+    
+// })
+// export default createAppContainer(MainNavigator)

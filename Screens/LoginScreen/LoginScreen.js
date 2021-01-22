@@ -12,9 +12,10 @@ import TextField from '../../Components/TextField/textField';
 import ButtonConnect from '../../Components/ButtonConnect/ButtonConnect';
 import Validations from '../../Common/Validations';
 import Constant from '../../Common/Constants';
-import CheckBoxLogin from '../../Components/CheckBoxLogin/CheckBoxLogin';
 import Api from '../../ApiCall/LoginApi';
 import {KeyboardAvoidingScrollView} from 'react-native-keyboard-avoiding-scroll-view';
+import CheckBox from '@react-native-community/checkbox';
+import AsyncStorage from '@react-native-community/async-storage'
 
 export default class LoginScreen extends Component {
   constructor(props) {
@@ -23,7 +24,7 @@ export default class LoginScreen extends Component {
       usernameText: '',
       passwordText: '',
       rememberLogin: false,
-      auto_login: false,
+      autoLogin: false,
       showPassword: true,
     };
   }
@@ -53,8 +54,12 @@ export default class LoginScreen extends Component {
       console.log(this.state.emailText + this.state.passwordText);
       Api.loginApi(this.state).then((response) => {
         if (response.code == 200) {
+          // this.props.navigation.navigate('HomeScreen')
           alert(response.message);
         } else {
+          // this.props.navigation.navigate('HomeScreen')
+          AsyncStorage.setItem('token','123456')
+  
           alert(response.message);
         }
       });
@@ -64,6 +69,13 @@ export default class LoginScreen extends Component {
   showPassword = () => {
     this.setState({showPassword: !this.state.showPassword});
   };
+  checkBoxTrue = (type) => {
+    if ((type = 'rememberLogin')) {
+      this.setState({rememberLogin: true});
+    } else if ((type = 'autoLogin')) {
+      this.setState({autoLogin: true});
+    }
+  };
   render() {
     return (
       <SafeAreaView style={Styles.mainContainer}>
@@ -72,7 +84,10 @@ export default class LoginScreen extends Component {
           <View style={Styles.inputContainer}>
             <Text style={Styles.inputLabel}>Username</Text>
             <View style={Styles.input}>
-              <TextField type={Constant.username}   parentCallBack={this.parentCallBackFunction}/>
+              <TextField
+                type={Constant.username}
+                parentCallBack={this.parentCallBackFunction}
+              />
             </View>
           </View>
 
@@ -82,8 +97,11 @@ export default class LoginScreen extends Component {
             <View style={Styles.input}>
               <View style={Styles.flex}>
                 <View style={Styles.textPassword}>
-                  <TextField   secureTextEntry={this.state.showPassword} type={Constant.password} 
-                  parentCallBack={this.parentCallBackFunction}/>
+                  <TextField
+                    secureTextEntry={this.state.showPassword}
+                    type={Constant.password}
+                    parentCallBack={this.parentCallBackFunction}
+                  />
                 </View>
                 <TouchableOpacity onPress={() => this.showPassword()}>
                   <Image
@@ -94,8 +112,33 @@ export default class LoginScreen extends Component {
             </View>
           </View>
           <Text style={Styles.forgetPassword}>Forgot Password ?</Text>
-          <CheckBoxLogin checkBoxLabel={'Remember Login '} />
-          <CheckBoxLogin checkBoxLabel={'Auto-Login'} />
+
+          <View style={Styles.checkBoxContainer}>
+            <View style={Styles.flex}>
+              <CheckBox
+                style={Styles.checkBox}
+                disabled={false}
+                value={this.state.rememberLogin}
+                onValueChange={() => this.checkBoxTrue('rememberLogin')}
+              />
+              <Text style={Styles.checkBoxLabel}>{'Remember Login'}</Text>
+            </View>
+          </View>
+
+          <View style={Styles.checkBoxContainer}>
+            <View style={Styles.flex}>
+              <CheckBox
+                style={Styles.checkBox}
+                disabled={false}
+                value={this.state.autoLogin}
+                onValueChange={(newValue) =>
+                  this.checkBoxTrue('autoLogin', newValue)
+                }
+              />
+              <Text style={Styles.checkBoxLabel}> {'Auto Login'} </Text>
+            </View>
+          </View>
+
           <View style={Styles.cacheContainer}>
             <View style={Styles.flex}>
               <View style={Styles.cacheImage}>
@@ -113,7 +156,11 @@ export default class LoginScreen extends Component {
             <Text style={Styles.underline}> Click here </Text>
             <Text>to cancel auto login</Text>
           </Text>
-          <ButtonConnect btnLabel={'Connect'} navigation={this.props.navigation} data={this.handleSubmit} />
+          <ButtonConnect
+            btnLabel={'Connect'}
+            navigation={this.props.navigation}
+            data={this.handleSubmit}
+          />
           <Text style={Styles.autoLoginText}>
             <Text>Dont have an account ? </Text>
             <Text style={Styles.textCreate}>Create</Text>

@@ -26,8 +26,8 @@ height:hp('5%')
         height:hp('5%')
     },
     autoLoginText:{
-marginTop:'5%',
-    height:hp('5%'),
+    marginTop:'5%',
+    height:hp('10%'),
     fontSize:14,
         color:'grey',
     },
@@ -67,5 +67,14 @@ color:'grey'
     },
     bottomContainer:{
 height:hp('45%')
-    }
+    },
+    checkBoxContainer:{
+        height:hp('7.5%')
+      },
+      checkBoxLabel:{
+      marginTop:'2%'
+      },
+      checkBox:{
+          width:wp('12%'),
+      },
 }
