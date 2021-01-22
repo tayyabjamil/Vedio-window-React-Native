@@ -16,7 +16,6 @@ import Api from '../../ApiCall/LoginApi';
 import {KeyboardAvoidingScrollView} from 'react-native-keyboard-avoiding-scroll-view';
 import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-community/async-storage'
-
 export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
@@ -26,8 +25,29 @@ export default class LoginScreen extends Component {
       rememberLogin: false,
       autoLogin: false,
       showPassword: true,
+      timer: 5
     };
   }
+ async componentDidMount(){
+    const autoLogin = await AsyncStorage.getItem('autoLogin')
+   if(autoLogin=="true"){
+    this.interval = setInterval(
+      () => this.setState((prevState)=> ({ timer: prevState.timer - 1 })),
+      1000
+    );
+   }
+  }
+  
+  componentDidUpdate(){
+    if(this.state.timer === 0){ 
+      this.handleSubmit()
+ 
+      clearInterval(this.interval);
+     
+    }
+  }
+  
+  
   parentCallBackFunction = (text, type) => {
     if (type === Constant.username) {
       this.setState({usernameText: text});
@@ -54,28 +74,33 @@ export default class LoginScreen extends Component {
       console.log(this.state.emailText + this.state.passwordText);
       Api.loginApi(this.state).then((response) => {
         if (response.code == 200) {
-          // this.props.navigation.navigate('HomeScreen')
+          this.props.navigation.navigate('HomeScreen')
           alert(response.message);
         } else {
-          // this.props.navigation.navigate('HomeScreen')
           AsyncStorage.setItem('token','123456')
-  
+          if(this.state.autoLogin==true){
+          AsyncStorage.setItem('autoLogin',"true")
+        }
+        if(this.state.rememberLogin==true){
+ 
+        AsyncStorage.setItem('rememberLogin',"true")
+        }
           alert(response.message);
+          this.props.navigation.navigate('HomeScreen')
+          
         }
       });
     } else {
     }
   };
+  cancelAutoLogin=()=>{
+    AsyncStorage.removeItem('autoLogin')
+      
+  }
   showPassword = () => {
     this.setState({showPassword: !this.state.showPassword});
   };
-  checkBoxTrue = (type) => {
-    if ((type = 'rememberLogin')) {
-      this.setState({rememberLogin: true});
-    } else if ((type = 'autoLogin')) {
-      this.setState({autoLogin: true});
-    }
-  };
+  
   render() {
     return (
       <SafeAreaView style={Styles.mainContainer}>
@@ -119,7 +144,8 @@ export default class LoginScreen extends Component {
                 style={Styles.checkBox}
                 disabled={false}
                 value={this.state.rememberLogin}
-                onValueChange={() => this.checkBoxTrue('rememberLogin')}
+                onValueChange={() =>   this.setState({rememberLogin: true})
+              }
               />
               <Text style={Styles.checkBoxLabel}>{'Remember Login'}</Text>
             </View>
@@ -132,7 +158,7 @@ export default class LoginScreen extends Component {
                 disabled={false}
                 value={this.state.autoLogin}
                 onValueChange={(newValue) =>
-                  this.checkBoxTrue('autoLogin', newValue)
+                  this.setState({autoLogin: true})
                 }
               />
               <Text style={Styles.checkBoxLabel}> {'Auto Login'} </Text>
@@ -147,13 +173,14 @@ export default class LoginScreen extends Component {
               <Text style={Styles.cacheLabel}>Clear cache</Text>
             </View>
           </View>
-
           <Text style={Styles.autoLoginText}>
             <Text>
-              Auto-Login will be triggered in 49 seconds,if you would like to
+              Auto-Login will be triggered in  {this.state.timer}  seconds,if you would like to
               connect now then hit connect else
             </Text>
-            <Text style={Styles.underline}> Click here </Text>
+            <TouchableOpacity onPress={()=>this.cancelAutoLogin()}>
+            <Text style={Styles.underline} > Click here </Text>
+            </TouchableOpacity>
             <Text>to cancel auto login</Text>
           </Text>
           <ButtonConnect

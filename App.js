@@ -10,22 +10,37 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rememberLogin:'12346'
+      rememberLogin:false,
+      autoLogin:false
     };
  
   }
+ async componentDidMount(){
+  const rememberLogin = await AsyncStorage.getItem('rememberLogin')
+  const autoLogin = await AsyncStorage.getItem('autoLogin')
  
+  if(rememberLogin=="true"){
+  this.setState({rememberLogin:true})
+ }
+
+ if(autoLogin=="true"){
+  this.setState({autoLogin:true})
+ }
+}
   render() {
-    
+   
 return (
   
 <SafeAreaView style={{flex: 1}}>
-{this.state.autoLogin
- &&
-<HomeScreen />
-  }
-{this.state.rememberLogin &&
+  {(this.state.rememberLogin == false && this.state.autoLogin == false) &&
 <LoginScreen />
+  }
+{this.state.autoLogin == true
+ &&
+<LoginScreen />
+}
+{this.state.rememberLogin ==true&&
+  <HomeScreen />
 }
 </SafeAreaView>
     );
