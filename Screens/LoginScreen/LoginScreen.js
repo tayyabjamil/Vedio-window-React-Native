@@ -21,14 +21,27 @@ export default class LoginScreen extends Component {
     super(props);
     this.state = {
       usernameText: '',
-      passwordText: '',
+      passwordText:'',
       rememberLogin: false,
       autoLogin: false,
       showPassword: true,
-      timer: 5
+      timer: 49
     };
   }
  async componentDidMount(){
+  AsyncStorage.getItem('usernameText').then((name)=>{
+    this.setState({usernameText:name})
+ console.log(this.state.usernameText)
+  })
+  AsyncStorage.getItem('passwordText').then((password)=>{
+    this.setState({passwordText:password})
+ console.log(this.state.passwordText)
+  })
+  
+  // AsyncStorage.getItem('passwordText')
+// this.setState({passwordText:passwordText})
+  // console.log(usernameText,passwordText)
+  // this.setState({usernameText:usernameText})
     const autoLogin = await AsyncStorage.getItem('autoLogin')
    if(autoLogin=="true"){
     this.interval = setInterval(
@@ -59,6 +72,7 @@ export default class LoginScreen extends Component {
   isFormFilled() {
     let checkPassword = Validations.checkPassword(this.state.passwordText);
     let checkUsername = Validations.checkUsername(this.state.usernameText);
+    
     if (checkUsername && checkPassword) {
       return true;
     }
@@ -73,25 +87,28 @@ export default class LoginScreen extends Component {
     if (this.isFormFilled()) {
       console.log(this.state.emailText + this.state.passwordText);
       Api.loginApi(this.state).then((response) => {
-        if (response.code == 200) {
-          this.props.navigation.navigate('HomeScreen')
-          alert(response.message);
-        } else {
-          AsyncStorage.setItem('token','123456')
+        if (response.status == true) {
+          AsyncStorage.setItem('usernameText',this.state.usernameText)
+          AsyncStorage.setItem('passwordText',this.state.passwordText)
+          
           if(this.state.autoLogin==true){
           AsyncStorage.setItem('autoLogin',"true")
+          AsyncStorage.removeItem('rememberLogin')
+    
         }
         if(this.state.rememberLogin==true){
  
         AsyncStorage.setItem('rememberLogin',"true")
+        AsyncStorage.removeItem('autoLogin')
+       
+      }
+          // alert(response.message);
+          this.props.navigation.navigate('HomeScreen')   
+        } else if(response.status == false){
+            alert(response.message)
         }
-          alert(response.message);
-          this.props.navigation.navigate('HomeScreen')
-          
-        }
-      });
-    } else {
-    }
+        });
+    } 
   };
   cancelAutoLogin=()=>{
     AsyncStorage.removeItem('autoLogin')
@@ -100,7 +117,14 @@ export default class LoginScreen extends Component {
   showPassword = () => {
     this.setState({showPassword: !this.state.showPassword});
   };
-  
+  clearCache=()=>{
+    AsyncStorage.removeItem('autoLogin')
+    AsyncStorage.removeItem('rememberLogin')
+    AsyncStorage.removeItem('usernameText')
+    AsyncStorage.removeItem('passwordText')
+    
+    
+  }
   render() {
     return (
       <SafeAreaView style={Styles.mainContainer}>
@@ -110,6 +134,7 @@ export default class LoginScreen extends Component {
             <Text style={Styles.inputLabel}>Username</Text>
             <View style={Styles.input}>
               <TextField
+                value={this.state.usernameText}
                 type={Constant.username}
                 parentCallBack={this.parentCallBackFunction}
               />
@@ -125,6 +150,7 @@ export default class LoginScreen extends Component {
                   <TextField
                     secureTextEntry={this.state.showPassword}
                     type={Constant.password}
+                    value={this.state.passwordText}
                     parentCallBack={this.parentCallBackFunction}
                   />
                 </View>
@@ -166,10 +192,10 @@ export default class LoginScreen extends Component {
           </View>
 
           <View style={Styles.cacheContainer}>
-            <View style={Styles.flex}>
-              <View style={Styles.cacheImage}>
+            <View style={Styles.flex} >
+              <TouchableOpacity style={Styles.cacheImage} onPress={()=>this.clearCache()}>
                 <Image source={require('../../assets/images/cache.png')} />
-              </View>
+              </TouchableOpacity>
               <Text style={Styles.cacheLabel}>Clear cache</Text>
             </View>
           </View>

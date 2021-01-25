@@ -51,7 +51,8 @@ height:hp('5%')
     },
   
     input:{
-       marginBottom:'5%',  
+        height:hp('5%'),
+        marginTop:10,
         borderBottomWidth:2,
         borderBottomColor:'lightgrey',
         

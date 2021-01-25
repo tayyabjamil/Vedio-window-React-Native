@@ -14,7 +14,8 @@ const TextField = props => {
                   secureTextEntry={props.secureTextEntry}
                     placeholder={props.placeholder}
                     placeholderTextColor={'gray'}
-                    onChangeText={handleText}  
+                    onChangeText={handleText} 
+                    value={props.value} 
                 ></TextInput>
                
             </View>

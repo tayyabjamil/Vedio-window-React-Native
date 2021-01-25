@@ -11,7 +11,7 @@ const checkEmail = (email)=>{
     
 }
 const checkPassword = (password)=>{
-    if (password.length == 0 ||password.length <  5) {
+    if (!password || password.length == 0 || password.length <  5) {
      
     return false   
     }
@@ -22,7 +22,7 @@ const checkPassword = (password)=>{
     
 }
 const checkUsername = (username)=>{
-    if(username.length==0 ||username.length < 1){
+    if(!username || username.length==0 ||username.length < 1){
         return false
     }else{
         return true

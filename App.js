@@ -5,44 +5,69 @@ import LoginScreen from './Screens/LoginScreen/LoginScreen';
 
 import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage'
+import MainNavigation from './Navigation/MainNavigation';
+
+import Splash from './Screens/Splash/Splash';
+import SplashScreen from './Screens/Splash/Splash'
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       rememberLogin:false,
-      autoLogin:false
+      autoLogin:false,
+      newUser:true
     };
  
   }
  async componentDidMount(){
-  const rememberLogin = await AsyncStorage.getItem('rememberLogin')
-  const autoLogin = await AsyncStorage.getItem('autoLogin')
  
-  if(rememberLogin=="true"){
-  this.setState({rememberLogin:true})
- }
-
- if(autoLogin=="true"){
-  this.setState({autoLogin:true})
- }
 }
   render() {
    
 return (
   
 <SafeAreaView style={{flex: 1}}>
-  {(this.state.rememberLogin == false && this.state.autoLogin == false) &&
-<LoginScreen />
-  }
-{this.state.autoLogin == true
- &&
-<LoginScreen />
-}
-{this.state.rememberLogin ==true&&
-  <HomeScreen />
-}
+<MainNavigation />
 </SafeAreaView>
     );
   }
 }
+
+
+
+// import * as React from 'react';
+// import { createStackNavigator } from 'react-navigation-stack'
+// import SplashScreen from './Screens/Splash/Splash'
+// import HomeScreen from './Screens/HomeScreen/HomeScreen'
+// import LoginScreen from './Screens/LoginScreen/LoginScreen'
+// import { createAppContainer } from 'react-navigation';
+
+
+//   const AccountNavigator = createStackNavigator({  
+//     Splash :{
+//             screen:SplashScreen, 
+//         },  
+//         LoginScreen :{screen:LoginScreen},
+        
+//         HomeNavigator: HomeNavigator,
+        
+//           navigationOptions:{
+//               headerShown: false,  
+//       },
+
+//     })            
+//     const HomeNavigator = createStackNavigator({  
+//             HomeScreen:{
+//                 screen:HomeScreen,
+//                 navigationOptions:{
+//                     headerShown: false,
+                  
+//                 }
+//             },
+//         })      
+
+
+// const MainNavigation = createStackNavigator();
+// export default createAppContainer(AccountNavigator);
+

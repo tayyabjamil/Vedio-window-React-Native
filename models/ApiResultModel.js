@@ -1,14 +1,11 @@
 class ApiResultModel{
-code = Number
+status = Boolean
 message = String
-jwt_token = String;
-dataModel ={};
-    constructor(message) {
+// data ={};
+    constructor(status,message) {
         this.message = message ?? '';
-  
-    //     this.code = code ?? '';
-    // this.dataModel = detailModel
-    // this.jwt_token = detailModelArray.jwt_token
+        this.status = status ?? '';
+        // this.data = data
         
 }
 
