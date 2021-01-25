@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text,TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage'
-
+import Styles from './Styles'
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -9,14 +9,26 @@ export default class HomeScreen extends Component {
     };
   }
   componentDidMount(){
-    // AsyncStorage.removeItem('rememberLogin')
    
   }
-
+logout=()=>{
+  AsyncStorage.removeItem('autoLogin')
+  AsyncStorage.removeItem('rememberLogin')
+  AsyncStorage.removeItem('usernameText')
+  AsyncStorage.removeItem('passwordText')
+  
+this.props.navigation.navigate('LoginScreen')
+}
   render() {
     return (
-      <View>
-        <Text> HomeScreen </Text>
+      <View style={Styles.container}>
+        <TouchableOpacity onPress={this.logout}
+          style={Styles.btnContainer}
+ 
+          underlayColor='#fff'
+           >
+          <Text style={Styles.btnText}>Logout</Text>
+        </TouchableOpacity>
       </View>
     );
   }
