@@ -3,6 +3,7 @@ const Constants = {
     LoginEndPoint:'apilogin',
     username:'username',
     password:'password',
-    
+    passwordLabel:'Password',
+    usernameLabel:'Username'
  }
  export default Constants

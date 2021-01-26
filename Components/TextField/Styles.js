@@ -6,7 +6,22 @@ export default {
  height:hp('5%')
  
     },
-
+    inputContainer:{
+marginTop:10
+    },
+    input:{
+        height:hp('5%'),
+        borderBottomWidth:2,
+        borderBottomColor:'lightgrey',
+        
+    },
+    flex:{
+        flexDirection:'row',
+    },
+    inputWidth:{
+        width:'90%'
+    },
+   
 errorLabel:{
 color:'red'
 },

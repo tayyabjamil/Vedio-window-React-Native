@@ -17,6 +17,7 @@ import Api from '../../ApiCall/LoginApi';
 import {KeyboardAvoidingScrollView} from 'react-native-keyboard-avoiding-scroll-view';
 import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-community/async-storage'
+import TextFieldComponent from '../../Components/TextField/textField'
 export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +26,6 @@ export default class LoginScreen extends Component {
       passwordText:'',
       rememberLogin: false,
       autoLogin: false,
-      showPassword: true,
       timer: 49,
       activityFlag:false
     };
@@ -109,9 +109,6 @@ this.setState({activityFlag:true})
     AsyncStorage.removeItem('autoLogin')
       
   }
-  showPassword = () => {
-    this.setState({showPassword: !this.state.showPassword});
-  };
   clearCache=()=>{
     AsyncStorage.removeItem('autoLogin')
     AsyncStorage.removeItem('rememberLogin')
@@ -130,47 +127,19 @@ this.setState({activityFlag:true})
        {this.state.activityFlag == false &&
         <KeyboardAvoidingScrollView>
           <Text style={Styles.loginText}>Video Window</Text>
-          <View style={Styles.inputContainer}>
-            <Text style={Styles.inputLabel}>Username</Text>
-            <View style={Styles.input}>
-              <TextField
-                value={this.state.usernameText}
-                type={Constant.username}
+             <TextFieldComponent 
+                   value={this.state.usernameText}
+                   type={Constant.username}
+                   label={Constant.usernameLabel}
+                   parentCallBack={this.parentCallBackFunction}
+             />
+          
+            <TextFieldComponent   
+                value={this.state.passwordText}
+                type={Constant.password}
+                label={Constant.passwordLabel}
                 parentCallBack={this.parentCallBackFunction}
               />
-            </View>
-          </View>
-
-          <View style={Styles.inputContainer}>
-            <Text style={Styles.inputLabel}>Password</Text>
-
-            <View style={Styles.input}>
-              <View style={Styles.flex}>
-                <View style={Styles.textPassword}>
-                  <TextField
-                    secureTextEntry={this.state.showPassword}
-                    type={Constant.password}
-                    value={this.state.passwordText}
-                    parentCallBack={this.parentCallBackFunction}
-                  />
-                </View>
-                {this.state.showPassword == true &&
-                <TouchableOpacity onPress={() => this.showPassword()}>
-                  <Image
-                    source={require('../../assets/images/eye.png')}
-                  />
-                </TouchableOpacity>
-              }
-              {this.state.showPassword == false &&
-                <TouchableOpacity onPress={() => this.showPassword()}>
-                  <Image
-                    source={require('../../assets/images/eyeclose.png')}
-                  />
-                </TouchableOpacity>
-               }
-              </View>
-            </View>
-          </View>
           <Text style={Styles.forgetPassword}>Forgot Password ?</Text>
 
           <View style={Styles.checkBoxContainer}>
@@ -213,9 +182,9 @@ this.setState({activityFlag:true})
               Auto-Login will be triggered in  {this.state.timer}  seconds,if you would like to
               connect now then hit connect else
             </Text>
-            <TouchableOpacity onPress={()=>this.cancelAutoLogin()}>
-            <Text style={Styles.underline} > Click here </Text>
-            </TouchableOpacity>
+            {/* <TouchableOpacity onPress={()=>this.cancelAutoLogin()}> */}
+            <Text style={Styles.underline} onPress={()=>this.cancelAutoLogin()}> Click here </Text>
+            {/* </TouchableOpacity> */}
             <Text>to cancel auto login</Text>
           </Text>
           <ButtonConnect
