@@ -6,6 +6,7 @@ import {
   Alert,
   TouchableOpacity,
   SafeAreaView,
+  ActivityIndicator
 } from 'react-native';
 import Styles from './Styles';
 import TextField from '../../Components/TextField/textField';
@@ -25,23 +26,17 @@ export default class LoginScreen extends Component {
       rememberLogin: false,
       autoLogin: false,
       showPassword: true,
-      timer: 49
+      timer: 49,
+      activityFlag:false
     };
   }
  async componentDidMount(){
   AsyncStorage.getItem('usernameText').then((name)=>{
     this.setState({usernameText:name})
- console.log(this.state.usernameText)
   })
   AsyncStorage.getItem('passwordText').then((password)=>{
     this.setState({passwordText:password})
- console.log(this.state.passwordText)
   })
-  
-  // AsyncStorage.getItem('passwordText')
-// this.setState({passwordText:passwordText})
-  // console.log(usernameText,passwordText)
-  // this.setState({usernameText:usernameText})
     const autoLogin = await AsyncStorage.getItem('autoLogin')
    if(autoLogin=="true"){
     this.interval = setInterval(
@@ -85,8 +80,9 @@ export default class LoginScreen extends Component {
   }
   handleSubmit = async () => {
     if (this.isFormFilled()) {
-      console.log(this.state.emailText + this.state.passwordText);
+this.setState({activityFlag:true})
       Api.loginApi(this.state).then((response) => {
+       this.setState({activityFlag:false})
         if (response.status == true) {
           AsyncStorage.setItem('usernameText',this.state.usernameText)
           AsyncStorage.setItem('passwordText',this.state.passwordText)
@@ -102,7 +98,6 @@ export default class LoginScreen extends Component {
         AsyncStorage.removeItem('autoLogin')
        
       }
-          // alert(response.message);
           this.props.navigation.navigate('HomeScreen')   
         } else if(response.status == false){
             alert(response.message)
@@ -122,12 +117,17 @@ export default class LoginScreen extends Component {
     AsyncStorage.removeItem('rememberLogin')
     AsyncStorage.removeItem('usernameText')
     AsyncStorage.removeItem('passwordText')
-    
-    
+
   }
   render() {
     return (
       <SafeAreaView style={Styles.mainContainer}>
+         {this.state.activityFlag == true &&
+         <View style={Styles.containerActivity}>
+         <ActivityIndicator size="large" color="grey" />
+          </View>
+          }
+       {this.state.activityFlag == false &&
         <KeyboardAvoidingScrollView>
           <Text style={Styles.loginText}>Video Window</Text>
           <View style={Styles.inputContainer}>
@@ -154,11 +154,20 @@ export default class LoginScreen extends Component {
                     parentCallBack={this.parentCallBackFunction}
                   />
                 </View>
+                {this.state.showPassword == true &&
                 <TouchableOpacity onPress={() => this.showPassword()}>
                   <Image
-                    source={require('../../assets/images/visibility.png')}
+                    source={require('../../assets/images/eye.png')}
                   />
                 </TouchableOpacity>
+              }
+              {this.state.showPassword == false &&
+                <TouchableOpacity onPress={() => this.showPassword()}>
+                  <Image
+                    source={require('../../assets/images/eyeclose.png')}
+                  />
+                </TouchableOpacity>
+               }
               </View>
             </View>
           </View>
@@ -219,7 +228,8 @@ export default class LoginScreen extends Component {
             <Text style={Styles.textCreate}>Create</Text>
           </Text>
         </KeyboardAvoidingScrollView>
-      </SafeAreaView>
+        }
+     </SafeAreaView>
     );
   }
 }

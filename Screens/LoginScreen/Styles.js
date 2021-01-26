@@ -1,6 +1,12 @@
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 export default {
+    containerActivity:{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+  
+    },
     mainContainer:{
 // height:hp('100%'),
 flex: 1,
