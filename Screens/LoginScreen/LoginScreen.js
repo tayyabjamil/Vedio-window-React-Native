@@ -6,6 +6,7 @@ import {
   Alert,
   TouchableOpacity,
   SafeAreaView,
+  ActivityIndicator
 } from 'react-native';
 import Styles from './Styles';
 import TextField from '../../Components/TextField/textField';
@@ -16,6 +17,7 @@ import Api from '../../ApiCall/LoginApi';
 import {KeyboardAvoidingScrollView} from 'react-native-keyboard-avoiding-scroll-view';
 import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-community/async-storage'
+import TextFieldComponent from '../../Components/TextField/textField'
 export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
@@ -24,24 +26,17 @@ export default class LoginScreen extends Component {
       passwordText:'',
       rememberLogin: false,
       autoLogin: false,
-      showPassword: true,
-      timer: 49
+      timer: 49,
+      activityFlag:false
     };
   }
  async componentDidMount(){
   AsyncStorage.getItem('usernameText').then((name)=>{
     this.setState({usernameText:name})
- console.log(this.state.usernameText)
   })
   AsyncStorage.getItem('passwordText').then((password)=>{
     this.setState({passwordText:password})
- console.log(this.state.passwordText)
   })
-  
-  // AsyncStorage.getItem('passwordText')
-// this.setState({passwordText:passwordText})
-  // console.log(usernameText,passwordText)
-  // this.setState({usernameText:usernameText})
     const autoLogin = await AsyncStorage.getItem('autoLogin')
    if(autoLogin=="true"){
     this.interval = setInterval(
@@ -85,8 +80,9 @@ export default class LoginScreen extends Component {
   }
   handleSubmit = async () => {
     if (this.isFormFilled()) {
-      console.log(this.state.emailText + this.state.passwordText);
+this.setState({activityFlag:true})
       Api.loginApi(this.state).then((response) => {
+       this.setState({activityFlag:false})
         if (response.status == true) {
           AsyncStorage.setItem('usernameText',this.state.usernameText)
           AsyncStorage.setItem('passwordText',this.state.passwordText)
@@ -102,7 +98,6 @@ export default class LoginScreen extends Component {
         AsyncStorage.removeItem('autoLogin')
        
       }
-          // alert(response.message);
           this.props.navigation.navigate('HomeScreen')   
         } else if(response.status == false){
             alert(response.message)
@@ -114,54 +109,37 @@ export default class LoginScreen extends Component {
     AsyncStorage.removeItem('autoLogin')
       
   }
-  showPassword = () => {
-    this.setState({showPassword: !this.state.showPassword});
-  };
   clearCache=()=>{
     AsyncStorage.removeItem('autoLogin')
     AsyncStorage.removeItem('rememberLogin')
     AsyncStorage.removeItem('usernameText')
     AsyncStorage.removeItem('passwordText')
-    
-    
+
   }
   render() {
     return (
       <SafeAreaView style={Styles.mainContainer}>
+         {this.state.activityFlag == true &&
+         <View style={Styles.containerActivity}>
+         <ActivityIndicator size="large" color="grey" />
+          </View>
+          }
+       {this.state.activityFlag == false &&
         <KeyboardAvoidingScrollView>
           <Text style={Styles.loginText}>Video Window</Text>
-          <View style={Styles.inputContainer}>
-            <Text style={Styles.inputLabel}>Username</Text>
-            <View style={Styles.input}>
-              <TextField
-                value={this.state.usernameText}
-                type={Constant.username}
+             <TextFieldComponent 
+                   value={this.state.usernameText}
+                   type={Constant.username}
+                   label={Constant.usernameLabel}
+                   parentCallBack={this.parentCallBackFunction}
+             />
+          
+            <TextFieldComponent   
+                value={this.state.passwordText}
+                type={Constant.password}
+                label={Constant.passwordLabel}
                 parentCallBack={this.parentCallBackFunction}
               />
-            </View>
-          </View>
-
-          <View style={Styles.inputContainer}>
-            <Text style={Styles.inputLabel}>Password</Text>
-
-            <View style={Styles.input}>
-              <View style={Styles.flex}>
-                <View style={Styles.textPassword}>
-                  <TextField
-                    secureTextEntry={this.state.showPassword}
-                    type={Constant.password}
-                    value={this.state.passwordText}
-                    parentCallBack={this.parentCallBackFunction}
-                  />
-                </View>
-                <TouchableOpacity onPress={() => this.showPassword()}>
-                  <Image
-                    source={require('../../assets/images/visibility.png')}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
           <Text style={Styles.forgetPassword}>Forgot Password ?</Text>
 
           <View style={Styles.checkBoxContainer}>
@@ -204,9 +182,9 @@ export default class LoginScreen extends Component {
               Auto-Login will be triggered in  {this.state.timer}  seconds,if you would like to
               connect now then hit connect else
             </Text>
-            <TouchableOpacity onPress={()=>this.cancelAutoLogin()}>
-            <Text style={Styles.underline} > Click here </Text>
-            </TouchableOpacity>
+            {/* <TouchableOpacity onPress={()=>this.cancelAutoLogin()}> */}
+            <Text style={Styles.underline} onPress={()=>this.cancelAutoLogin()}> Click here </Text>
+            {/* </TouchableOpacity> */}
             <Text>to cancel auto login</Text>
           </Text>
           <ButtonConnect
@@ -219,7 +197,8 @@ export default class LoginScreen extends Component {
             <Text style={Styles.textCreate}>Create</Text>
           </Text>
         </KeyboardAvoidingScrollView>
-      </SafeAreaView>
+        }
+     </SafeAreaView>
     );
   }
 }
