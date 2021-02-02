@@ -50,6 +50,10 @@ export default {
     textDecorationLine: 'underline',
     color: 'skyblue',
   },
+  activityIndicator:{
+    color:'grey',
+    size:'large'
+  },
   cacheImage: {
     width: wp('12%'),
   },

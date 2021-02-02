@@ -5,14 +5,10 @@ import { DATA_INPUT} from '../ActionTypes'
 import {CHECKBOX_INPUT} from '../ActionTypes'
 import {STOP_TIMER} from '../ActionTypes'
 import {START_TIMER} from '../ActionTypes'
-
 import {CLEAR_CACHE} from '../ActionTypes'
-
 import {CLEAR_ERROR_DATA} from '../ActionTypes'
-
-
 import Api from '../../ApiCall/LoginApi'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constant from '../../Common/Constants'
 
 export const storeInputData = (value,type) =>{
     return {   
@@ -67,20 +63,20 @@ export const callApi = ()=>{
        
         Api.loginApi(data.loginReducer).then((response) => {
             if (response.status == true) {
-                AsyncStorage.setItem('usernameText',data.loginReducer.usernameText)
-                AsyncStorage.setItem('passwordText',data.loginReducer.passwordText)
+
                 
                 if(data.loginReducer.autoLogin==true){
-                AsyncStorage.setItem('autoLogin',"true")
-                AsyncStorage.removeItem('rememberLogin')
-          
+                Constant.LocalStore.setItem(Constant.autoLogin,"true")
+                Constant.LocalStore.removeItem(Constant.rememberLogin)
+                Constant.LocalStore.setItem(Constant.username,data.loginReducer.usernameText)
+                Constant.LocalStore.setItem(Constant.password,data.loginReducer.passwordText)
+                
               }
               if(data.loginReducer.rememberLogin==true){
        
-              AsyncStorage.setItem('rememberLogin',"true")
-              AsyncStorage.removeItem('autoLogin')  
+              Constant.LocalStore.setItem(Constant.rememberLogin,"true")
+              Constant.LocalStore.removeItem(Constant.autoLogin)  
               }
-                // this.props.navigation.navigate('HomeScreen')   
                 dispatch(dataSuccess(response.message))
               
             } else if(response.status == false){

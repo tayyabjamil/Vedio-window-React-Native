@@ -1,10 +1,9 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Constant from '../Common/Constants'
 const clearCache = ()=>{
-    AsyncStorage.removeItem('autoLogin');
-    AsyncStorage.removeItem('rememberLogin');
-    AsyncStorage.removeItem('usernameText');
-    AsyncStorage.removeItem('passwordText');
+    Constant.LocalStore.removeItem('autoLogin');
+    Constant.LocalStore.removeItem('rememberLogin');
+    Constant.LocalStore.removeItem('usernameText');
+    Constant.LocalStore.removeItem('passwordText');
  
 }
 export default {clearCache} 

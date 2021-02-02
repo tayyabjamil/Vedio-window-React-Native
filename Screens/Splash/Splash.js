@@ -1,39 +1,30 @@
-import React, {useEffect,useState} from 'react'
-import { View, Image,  } from 'react-native'
-import { CommonActions } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Styles from './Styles'
+import React, {useEffect} from 'react';
+import {View} from 'react-native';
+import Styles from './Styles';
+import Constant from '../../Common/Constants';
+const Splash = (props) => {
+  useEffect(() => {
+    gotoHomeScreen();
+  });
 
-const Splash =(props)=>{
-    useEffect(()=>{
-  gotoHomeScreen();
- })
-   
+  const gotoHomeScreen = async () => {
+    const rememberLogin = await Constant.LocalStore.getItem(Constant.rememberLogin);
+    const autoLogin = await Constant.LocalStore.getItem(Constant.autoLogin);
 
-   const gotoHomeScreen = async() => {
-    const rememberLogin = await AsyncStorage.getItem('rememberLogin')
-    const autoLogin = await AsyncStorage.getItem('autoLogin')
-  
-    setTimeout(async() => {
-       
-        if(rememberLogin=="true"){
-            props.navigation.navigate('HomeScreen')
-        
-        }
-      
-       if(autoLogin=="true"){
-        props.navigation.navigate('LoginScreen')
-    
+    setTimeout(async () => {
+      if (rememberLogin == 'true') {
+        props.navigation.navigate(Constant.HomeRoute);
       }
-      if(autoLogin==null && rememberLogin ==null){
-        props.navigation.navigate('LoginScreen')
+
+      if (autoLogin == 'true') {
+        props.navigation.navigate(Constant.LoginRoute);
       }
-    }, 500)
+      if (autoLogin == null && rememberLogin == null) {
+        props.navigation.navigate(Constant.LoginRoute);
       }
-        return (
-            <View style={Styles.container}>
-            </View>
-        )
-    }
+    }, 500);
+  };
+  return <View style={Styles.container}></View>;
+};
 
 export default Splash;

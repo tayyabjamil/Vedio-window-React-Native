@@ -9,14 +9,12 @@ const loginApi = (data, response) => {
       password: data.passwordText,
     })
     .then(function (response) {
-      let loginModelResult;
+    
       if (response.data.status==true) {
-        loginModelResult = new LoginModel(response.data.data);
+        // loginModelResult = new LoginModel(response.data.data);
+       let loginModelResult: LoginModel = response.data.data;
       }
-      let apiResult = new ApiResultModel(
-        response.data.status,
-        response.data.message,
-      );
+      let apiResult :  ApiResultModel = response.data
       return apiResult;
     
      })

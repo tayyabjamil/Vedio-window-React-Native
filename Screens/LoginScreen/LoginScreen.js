@@ -1,44 +1,38 @@
 import React, {Component} from 'react';
-import {
-  View,
-  Image,
-  Text,
-  Alert,
-  TouchableOpacity,
-  SafeAreaView,
-  ActivityIndicator,
-} from 'react-native';
+import { View,Image,Text,Alert,TouchableOpacity,SafeAreaView,ActivityIndicator,} from 'react-native';
 import Styles from './Styles';
-import TextField from '../../Components/TextField/textField';
 import ButtonConnect from '../../Components/ButtonConnect/ButtonConnect';
 import Validations from '../../Common/Validations';
 import Constant from '../../Common/Constants';
-import Api from '../../ApiCall/LoginApi';
 import {KeyboardAvoidingScrollView} from 'react-native-keyboard-avoiding-scroll-view';
 import CheckBox from '@react-native-community/checkbox';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import TextFieldComponent from '../../Components/TextField/textField';
 import * as loginActions from '../../ReduxStore/Actions/loginAction';
 import {connect} from 'react-redux';
-import Utils from '../../Common/Utils'
+import Utils from '../../Common/Utills'
 class LoginScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      timer: 15,
+    this.state = {  
+      timer: 49,
       stopTimer: false,
     };
   }
+
   async componentDidMount() {
-    AsyncStorage.getItem('usernameText').then((name) => {
+    Constant.LocalStore.getItem(Constant.username).then((name) => {
       this.props.storeInputData(name, Constant.username);
     });
 
-    AsyncStorage.getItem('passwordText').then((password) => {
+    Constant.LocalStore.getItem(Constant.password).then((password) => {
       this.props.storeInputData(password, Constant.password);
     });
+   this.counterStart()
+  }
+  counterStart=async()=>{
 
-    const autoLogin = await AsyncStorage.getItem('autoLogin');
+    const autoLogin = await Constant.LocalStore.getItem(Constant.autoLogin);
+
     if (autoLogin == 'true') {
       this.interval = setInterval(
         () => this.setState((prevState) => ({timer: prevState.timer - 1})),
@@ -48,36 +42,24 @@ class LoginScreen extends Component {
   }
 
   componentDidUpdate() {
+    this.props.clearErrorApi()
+   
     if (this.state.stopTimer == true) {
+    
       clearInterval(this.interval);
     }
     if (this.state.timer === 0) {
+     
       clearInterval(this.interval);
-      this.setState({timer:15})
+      this.setState({timer:49})
       this.handleSubmit();
-    }
-    if (this.props.successLoginApi == 'Logged in') {
-      this.props.navigation.navigate('HomeScreen');
-    }
-    if (this.props.errorLoginApi !== '') {
-      this.createTwoButtonAlert();
-    }
+    
+      if(this.props.successLoginApi !== Constant.LoggedIn){
+      this.counterStart()
+      }
   }
-  createTwoButtonAlert = () =>
-    Alert.alert(
-      'Error',
-      this.props.errorLoginApi,
-      [
-        {
-          text: 'Cancel',
-          onPress: () => this.props.clearErrorApi(),
-          style: 'cancel',
-        },
-        {text: 'OK', onPress: () => this.props.clearErrorApi()},
-      ],
-      {cancelable: false},
-    );
-
+ }
+  
   isFormFilled() {
     let checkPassword = Validations.checkPassword(this.props.passwordText);
     let checkUsername = Validations.checkUsername(this.props.usernameText);
@@ -86,9 +68,9 @@ class LoginScreen extends Component {
       return true;
     }
     if (!checkUsername) {
-      Alert.alert('invalid username');
+      Alert.alert(Constant.InvalidUsername);
     } else if (!checkPassword) {
-      Alert.alert('invalid password');
+      Alert.alert(Constant.InvalidPassword);
     }
     return false;
   }
@@ -106,7 +88,7 @@ class LoginScreen extends Component {
     Utils.clearCache()
    };
   navigateHome = () => {
-    this.props.navigation.navigate('HomeScreen');
+    this.props.navigation.navigate(Constant.HomeRoute);
   };
   render() {
     return (
@@ -118,7 +100,8 @@ class LoginScreen extends Component {
         )}
 
         {this.props.loading == false && (
-          <KeyboardAvoidingScrollView>
+         <KeyboardAvoidingScrollView>
+        
             <Text style={Styles.loginText}>{Constant.LabelVideoWindow}</Text>
             <TextFieldComponent
               value={this.props.usernameText}
@@ -176,17 +159,15 @@ class LoginScreen extends Component {
             <Text style={Styles.autoLoginText}>
               <Text>
                 Auto-Login will be triggered in {this.state.timer} seconds,if
-                you would like to connect now then hit connect else 
-              </Text>
+                you would like to connect now then hit connect else  </Text>
               <Text
                 style={Styles.underline}
                 onPress={() => this.cancelAutoLogin()}>
-                   Click here
+                    Click here
               </Text>
               <Text> to cancel auto login</Text>
             </Text>
-            <ButtonConnect
-              btnLabel={'Connect'}
+            <ButtonConnect btnLabel={'Connect'}
               navigation={this.props.navigation}
               data={this.handleSubmit}
             />
@@ -201,7 +182,14 @@ class LoginScreen extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state,ownProps) => {
+  if(state.loginReducer.error!==""){
+ alert(state.loginReducer.error)
+  }
+  if(state.loginReducer.success==Constant.LoggedIn){
+    ownProps.navigation.navigate(Constant.HomeRoute)
+   }
+ 
   return {
     stopTime: state.loginReducer.stopTime,
     usernameText: state.loginReducer.usernameText,
@@ -212,7 +200,7 @@ const mapStateToProps = (state) => {
     rememberLogin: state.loginReducer.rememberLogin,
     autoLogin: state.loginReducer.autoLogin,
   };
-};
+ };
 
 const mapDispatchToProps = (dispatch) => {
   return {
