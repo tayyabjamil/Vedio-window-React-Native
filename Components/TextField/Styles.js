@@ -10,7 +10,8 @@ export default {
 marginTop:10
     },
     input:{
-        height:hp('5%'),
+        marginTop:10,
+        height:hp('6%'),
         borderBottomWidth:2,
         borderBottomColor:'lightgrey',
         

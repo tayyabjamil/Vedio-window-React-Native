@@ -1,11 +1,11 @@
 class ApiResultModel{
 status = Boolean
 message = String
-// data ={};
-    constructor(status,message) {
+data ={}
+    constructor(status,message,data) {
         this.message = message ?? '';
         this.status = status ?? '';
-        // this.data = data
+        this.data = data ?? ''
         
 }
 

@@ -1,3 +1,9 @@
+
+import GroupModel from '../models/GroupModel';
+import PhysicalSiteNamesModel from '../models/PhysicalSiteNamesModel';
+import OperatingHoursModel from '../models/OperatingHoursModel';
+import UserProfileModel from '../models/UserProfileModel';
+
 class LoginModel {
   id = String;
   username = String;
@@ -17,7 +23,7 @@ class LoginModel {
   physical_sitenames=[];
   logo=String;
   group={}
-  constructor(data,userprofile,operation_hours,physical_sitenames,group) {
+  constructor(data) {
     this.id = data.id ?? '';
     this.username = data.username ?? '';
     this.email = data.email ?? '';
@@ -31,11 +37,19 @@ class LoginModel {
     this.logged_in = data.logged_in ?? '';
     this.email_verified = data.email_verified ?? '';
     this.user_type = data.user_type ?? '';
-    this.userprofile = userprofile;
-    this.operation_hours=operation_hours;
-    this.physical_sitenames=physical_sitenames;
+    this.userprofile = new UserProfileModel(data.userprofile);
+    
+     data.operation_hours.forEach(element => {
+      let data =  new OperatingHoursModel(element)
+      this.operation_hours.push(data)
+    });
+    
+     data.physical_sitenames.forEach(element => {
+      let data =  new PhysicalSiteNamesModel(element)
+      this.physical_sitenames.push(data)
+    });
     this.logo=data.logo;
-    this.group=group;
+    this.group= new GroupModel(data.group);
     
 }
 }

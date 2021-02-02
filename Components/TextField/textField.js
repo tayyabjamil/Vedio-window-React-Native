@@ -14,13 +14,24 @@ const TextField = props => {
          <View style={Styles.flex}>
         
           <View style={Styles.inputWidth}>
-          <TextInput 
-                  secureTextEntry={props.secureTextEntry}
+             {props.type=="password" &&
+               <TextInput 
+                    secureTextEntry={showPassword}
                     placeholder={props.placeholder}
                     placeholderTextColor={'gray'}
                     onChangeText={handleText} 
                     value={props.value} 
                 ></TextInput>
+             }
+             
+             {props.type=="username" &&
+               <TextInput 
+                    placeholder={props.placeholder}
+                    placeholderTextColor={'gray'}
+                    onChangeText={handleText} 
+                    value={props.value} 
+                ></TextInput>
+             }
                 </View>
             {props.type == "password" &&
             <View>

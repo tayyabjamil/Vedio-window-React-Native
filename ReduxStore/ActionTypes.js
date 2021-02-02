@@ -1,0 +1,10 @@
+export const FETCH_DATA = 'FETCH_DATA'
+export const DATA_SUCCESS = 'DATA_SUCCESS'
+export const DATA_FALIURE = 'DATA_FALIURE'
+export const DATA_INPUT = 'DATA_INPUT'
+export const CHECKBOX_INPUT = 'CHECKBOX_INPUT'
+export const CLEAR_CACHE = 'CLEAR_CACHE'
+export const STOP_TIMER = 'STOP_TIMER'
+export const START_TIMER = 'START_TIMER'
+export const CLEAR_ERROR_DATA = 'CLEAR_ERROR_DATA'
+

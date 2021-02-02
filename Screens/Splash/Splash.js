@@ -1,8 +1,7 @@
 import React, {useEffect,useState} from 'react'
 import { View, Image,  } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
-import AsyncStorage from '@react-native-community/async-storage'
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Styles from './Styles'
 
 const Splash =(props)=>{
@@ -33,10 +32,6 @@ const Splash =(props)=>{
       }
         return (
             <View style={Styles.container}>
-                {/* <Image source={require('../../assets/images/loading.png')}
-                    style={Styles.imageStyle}
-                    resizeMode="contain"
-                /> */}
             </View>
         )
     }

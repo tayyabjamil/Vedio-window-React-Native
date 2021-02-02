@@ -23,6 +23,8 @@ export default {
   },
   cacheContainer: {
     height: hp('5%'),
+    flexDirection: 'row',
+ 
   },
   forgetPassword: {
     paddingTop: '2%',
@@ -48,9 +50,6 @@ export default {
     textDecorationLine: 'underline',
     color: 'skyblue',
   },
-  flex: {
-    flexDirection: 'row',
-  },
   cacheImage: {
     width: wp('12%'),
   },
@@ -74,6 +73,8 @@ export default {
     height: hp('45%'),
   },
   checkBoxContainer: {
+    flexDirection: 'row',
+ 
     height: hp('7.5%'),
   },
   checkBoxLabel: {

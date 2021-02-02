@@ -5,7 +5,7 @@ import Styles from './Styles'
 const ButtonSignIn = props =>{ 
     
   useEffect(()=>{
-    console.log(props.navigation)
+    // console.log(props.navigation)
 })
     return (
         <View style={Styles.btnView}>

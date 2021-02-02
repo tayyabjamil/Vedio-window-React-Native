@@ -1,22 +1,24 @@
 import React, { Component } from 'react';
 import { View, Text,TouchableOpacity } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Styles from './Styles'
-export default class HomeScreen extends Component {
+import Utils from '../../Common/Utils'
+import * as loginActions from '../../ReduxStore/Actions/loginAction'
+import { connect} from 'react-redux'
+
+ class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
     };
   }
-  componentDidMount(){
+  componentDidMount(){  
    
   }
 logout=()=>{
-  AsyncStorage.removeItem('autoLogin')
-  AsyncStorage.removeItem('rememberLogin')
-  AsyncStorage.removeItem('usernameText')
-  AsyncStorage.removeItem('passwordText')
-  
+  this.props.clearCache()
+  Utils.clearCache()
+ 
 this.props.navigation.navigate('LoginScreen')
 }
   render() {
@@ -33,3 +35,16 @@ this.props.navigation.navigate('LoginScreen')
     );
   }
 }
+
+const mapStateToProps=(state)=>{
+  return {
+   }
+}
+
+const mapDispatchToProps=(dispatch)=>{
+  return {
+    clearCache:()=>dispatch(loginActions.clearCache()),
+  
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(HomeScreen)
