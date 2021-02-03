@@ -1,17 +1,25 @@
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 export default {
  inputView:{ 
- height:hp('5%')
- 
+  
+    },
+    labelText:{
+        fontSize: RFValue(13),
+   
+    },
+    placeholderText:{
+        fontSize: RFValue(12),
+        // backgroundColor:'green'
+   
     },
     inputContainer:{
-marginTop:10
-    },
-    input:{
-        marginTop:10,
         height:hp('6%'),
+        marginTop:30,
+          },
+    input:{
         borderBottomWidth:2,
         borderBottomColor:'lightgrey',
         
@@ -20,7 +28,7 @@ marginTop:10
         flexDirection:'row',
     },
     inputWidth:{
-        width:'90%'
+        width:'94%'
     },
    
 errorLabel:{

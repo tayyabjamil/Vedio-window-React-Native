@@ -75,6 +75,9 @@ export const callApi = ()=>{
               if(data.loginReducer.rememberLogin==true){
        
               Constant.LocalStore.setItem(Constant.rememberLogin,"true")
+              Constant.LocalStore.setItem(Constant.username,"")
+              Constant.LocalStore.setItem(Constant.password,"")
+           
               Constant.LocalStore.removeItem(Constant.autoLogin)  
               }
                 dispatch(dataSuccess(response.message))

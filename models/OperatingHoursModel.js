@@ -9,4 +9,4 @@ class OperatingHoursModel {
     off_minutes : Number=0;
   }
   export default OperatingHoursModel;
-  
+         

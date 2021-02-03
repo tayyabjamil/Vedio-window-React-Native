@@ -1,15 +1,25 @@
-import React, { useState } from 'react'
-import { TextInput, View, Image,Text ,TouchableOpacity} from 'react-native'
+import React, { useState ,useEffect} from 'react'
+import { TextInput, View, Image,Text ,TouchableOpacity,Dimensions} from 'react-native'
 // import Colors from '../../Common/Colors'
 import Styles from './Styles'
 const TextField = props => {
+const[deviceType,setdeviceType]=useState('')
+  useEffect(() => {
+    const deviceType= Dimensions.get('window').width
+    if(deviceType<500){
+setdeviceType("mobile")
+    }else{
+      setdeviceType("tab")
+    }
+    console.log(deviceType)
+  }, [])
   const [showPassword,setShowPassword]=useState(true)
     const handleText = (text) => {
                 props.parentCallBack(text,props.type)  
     }
     return (
         <View style={Styles.inputContainer}>
-        <Text style={Styles.inputLabel}>{props.label}</Text>
+        <Text style={Styles.labelText}>{props.label}</Text>
        <View style={Styles.input}>
          <View style={Styles.flex}>
         
@@ -21,6 +31,7 @@ const TextField = props => {
                     placeholderTextColor={'gray'}
                     onChangeText={handleText} 
                     value={props.value} 
+                    style={Styles.placeholderText}
                 ></TextInput>
              }
              
@@ -29,7 +40,9 @@ const TextField = props => {
                     placeholder={props.placeholder}
                     placeholderTextColor={'gray'}
                     onChangeText={handleText} 
-                    value={props.value} 
+                    value={props.value}
+                    style={Styles.placeholderText}
+             
                 ></TextInput>
              }
                 </View>
@@ -37,17 +50,31 @@ const TextField = props => {
             <View>
             {showPassword == true && 
           <TouchableOpacity onPress={()=>setShowPassword(!showPassword)}>
-            <Image
+           {deviceType == "mobile" &&
+            <Image 
               source={require('../../assets/images/eye.png')}
             />
-          </TouchableOpacity>
+           }
+            {deviceType == "tab" &&
+            <Image 
+              source={require('../../assets/images/eye-open-large.png')}
+            />
+           }
+            </TouchableOpacity>
         }
+
         {showPassword == false &&
           <TouchableOpacity onPress={()=>setShowPassword(!showPassword)}>
-            <Image
+            {deviceType == "mobile" &&
+            <Image 
               source={require('../../assets/images/eyeclose.png')}
             />
-          </TouchableOpacity>
+           }
+            {deviceType == "tab" &&
+            <Image 
+              source={require('../../assets/images/eye-closed-large.png')}
+            />
+           }</TouchableOpacity>
          } 
          </View>
         }

@@ -2,7 +2,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 export default {
   containerActivity: {
     flex: 1,
@@ -15,29 +15,41 @@ export default {
   },
   loginText: {
     color: 'black',
-    fontSize: 30,
-    height: hp('15%'),
+     fontSize: RFValue(28),
+   height: hp('15%'),
   },
   inputContainer: {
     height: hp('10%'),
   },
   cacheContainer: {
-    height: hp('5%'),
+    height: hp('7%'),
     flexDirection: 'row',
- 
+    alignItems: 'center',
   },
   forgetPassword: {
-    paddingTop: '2%',
-    paddingBottom: '2%',
+    paddingTop: 40,
     color: 'grey',
+    fontSize: RFValue(13),
     alignSelf: 'flex-end',
-    height: hp('5%'),
+    height: hp('9%'),
+    alignItems:'center',
+   
   },
   autoLoginText: {
-    marginTop: '5%',
-    height: hp('10%'),
-    fontSize: 14,
+    marginTop: '2%',
+    height: hp('8%'),
+    fontSize: RFValue(13),
     color: 'grey',
+  },
+  autologinWidth:{
+width:wp('80%')
+  },
+  noAccountView:{
+    paddingTop: '4%',
+    height: hp('8%'),
+    fontSize: RFValue(13),
+    color: 'grey',
+  
   },
   clickText: {
     color: 'black',
@@ -55,7 +67,7 @@ export default {
     size:'large'
   },
   cacheImage: {
-    width: wp('12%'),
+    width: 50,
   },
 
   input: {
@@ -78,13 +90,14 @@ export default {
   },
   checkBoxContainer: {
     flexDirection: 'row',
- 
-    height: hp('7.5%'),
+    alignItems:'center',
+    height: hp('7%'),
   },
   checkBoxLabel: {
-    marginTop: '2%',
+    fontSize: RFValue(13),
+  
   },
   checkBox: {
-    width: wp('12%'),
+    width:50,
   },
 };

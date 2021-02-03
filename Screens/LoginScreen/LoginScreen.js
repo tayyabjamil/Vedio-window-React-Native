@@ -116,6 +116,7 @@ class LoginScreen extends Component {
               label={Constant.passwordLabel}
               parentCallBack={(value,type)=>this.props.storeInputData(value,type)}
             />
+            
             <Text style={Styles.forgetPassword}>{Constant.LabelForgetPassword}</Text>
 
             <View style={Styles.checkBoxContainer}>
@@ -154,24 +155,23 @@ class LoginScreen extends Component {
                 onPress={() => this.clearCache()}>
                 <Image source={require('../../assets/images/cache.png')} />
               </TouchableOpacity>
-              <Text style={Styles.cacheLabel}>{Constant.LabelClearCache}</Text>
+              <Text style={Styles.checkBoxLabel}>{Constant.LabelClearCache}</Text>
             </View>
             <Text style={Styles.autoLoginText}>
-              <Text>
+              <Text style={Styles.autologinWidth}>
                 Auto-Login will be triggered in {this.state.timer} seconds,if
-                you would like to connect now then hit connect else  </Text>
+                you would like to connect now then hit connect else    </Text>
               <Text
                 style={Styles.underline}
                 onPress={() => this.cancelAutoLogin()}>
-                    Click here
-              </Text>
+                    Click here </Text>
               <Text> to cancel auto login</Text>
             </Text>
             <ButtonConnect btnLabel={'Connect'}
               navigation={this.props.navigation}
               data={this.handleSubmit}
             />
-            <Text style={Styles.autoLoginText}>
+            <Text style={Styles.noAccountView}>
               <Text>{Constant.LabelNoAccount}</Text>
               <Text style={Styles.textCreate}>{Constant.LabelCreate}</Text>
             </Text>
