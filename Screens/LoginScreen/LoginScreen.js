@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View,Image,Text,Alert,TouchableOpacity,SafeAreaView,ActivityIndicator,} from 'react-native';
+import {StyleSheet, View,Image,Text,Alert,TouchableOpacity,SafeAreaView,ActivityIndicator,Dimensions} from 'react-native';
 import Styles from './Styles';
 import ButtonConnect from '../../Components/ButtonConnect/ButtonConnect';
 import Validations from '../../Common/Validations';
@@ -16,10 +16,19 @@ class LoginScreen extends Component {
     this.state = {  
       timer: 49,
       stopTimer: false,
+      screen:Dimensions.get('window'),
+      screenType:''
     };
+  
   }
+  
 
+   isPortrait = () => {
+    const dim = Dimensions.get('screen');
+    return dim.height >= dim.width;
+  }; 
   async componentDidMount() {
+    console.log(this.state.screenType)
     Constant.LocalStore.getItem(Constant.username).then((name) => {
       this.props.storeInputData(name, Constant.username);
     });
@@ -59,7 +68,14 @@ class LoginScreen extends Component {
       }
   }
  }
-  
+ getOrientation(){
+  if (this.state.screen.width > this.state.screen.height){
+    this.setState({screenType:'LANDSCAPE'}) ;
+  }else {
+    this.setState({screenType:'PORTRAIT'})
+  }
+}
+
   isFormFilled() {
     let checkPassword = Validations.checkPassword(this.props.passwordText);
     let checkUsername = Validations.checkUsername(this.props.usernameText);
@@ -92,7 +108,10 @@ class LoginScreen extends Component {
   };
   render() {
     return (
-      <SafeAreaView style={Styles.mainContainer}>
+      <SafeAreaView  onLayout = {this.getOrientation.bind(this)}
+      style={Styles.mainContainer}
+      // style={this.state.screen == 'PORTRAIT' ? Styles.landscapeStyles : Styles. portraitStyles}
+      >
         {this.props.loading == true && (
           <View style={Styles.containerActivity}>
             <ActivityIndicator size="large" color="grey" />
@@ -100,7 +119,7 @@ class LoginScreen extends Component {
         )}
 
         {this.props.loading == false && (
-         <KeyboardAvoidingScrollView>
+         <KeyboardAvoidingScrollView style={{flex:1}}>
         
             <Text style={Styles.loginText}>{Constant.LabelVideoWindow}</Text>
             <TextFieldComponent
@@ -160,7 +179,7 @@ class LoginScreen extends Component {
             <Text style={Styles.autoLoginText}>
               <Text style={Styles.autologinWidth}>
                 Auto-Login will be triggered in {this.state.timer} seconds,if
-                you would like to connect now then hit connect else    </Text>
+                you would like to connect now then hit connect else </Text>
               <Text
                 style={Styles.underline}
                 onPress={() => this.cancelAutoLogin()}>
@@ -215,3 +234,10 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
+const portraitStyles = StyleSheet.create({
+  
+ });
+ 
+ const landscapeStyles = StyleSheet.create({
+  
+ });

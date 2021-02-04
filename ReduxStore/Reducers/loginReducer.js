@@ -9,8 +9,13 @@ import {START_TIMER} from '../ActionTypes'
 import {CLEAR_ERROR_DATA} from '../ActionTypes'
 
 import Constant from '../../Common/Constants';
+// const getData =async()=>{
+//   return Constant.LocalStore.getItem(Constant.timerStart)
+  
+// }
 
 const initialState = {
+
   loading: false,
   success: '',
   error: '',
@@ -19,6 +24,7 @@ const initialState = {
   rememberLogin:false,   
   autoLogin:false,
   stopTime:false,
+  timerStart: ''
 };
 const LoginReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -83,8 +89,9 @@ const LoginReducer = (state = initialState, action) => {
           rememberLogin:false,
           autoLogin:false,
           success:'',
-          error:''
-        
+          error:'',
+          timerStart: ''
+
           };
       case STOP_TIMER:
       console.log(state.stopTime)    

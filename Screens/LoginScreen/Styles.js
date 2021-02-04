@@ -4,6 +4,17 @@ import {
 } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 export default {
+   portraitStyles :{
+height:hp('100%'),
+width:wp('100%'),
+padding:'7%'
+   },
+   
+    landscapeStyles :{
+      height:hp('100%'),
+      width:hp('100%'),
+      padding:'7%'
+    },
   containerActivity: {
     flex: 1,
     alignItems: 'center',

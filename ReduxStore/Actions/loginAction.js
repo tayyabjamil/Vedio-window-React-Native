@@ -67,6 +67,8 @@ export const callApi = ()=>{
                 
                 if(data.loginReducer.autoLogin==true){
                 Constant.LocalStore.setItem(Constant.autoLogin,"true")
+                Constant.LocalStore.setItem(Constant.timerStart,"true")
+               
                 Constant.LocalStore.removeItem(Constant.rememberLogin)
                 Constant.LocalStore.setItem(Constant.username,data.loginReducer.usernameText)
                 Constant.LocalStore.setItem(Constant.password,data.loginReducer.passwordText)
@@ -77,6 +79,7 @@ export const callApi = ()=>{
               Constant.LocalStore.setItem(Constant.rememberLogin,"true")
               Constant.LocalStore.setItem(Constant.username,"")
               Constant.LocalStore.setItem(Constant.password,"")
+              Constant.LocalStore.removeItem(Constant.timerStart)  
            
               Constant.LocalStore.removeItem(Constant.autoLogin)  
               }

@@ -26,6 +26,7 @@ const Constants = {
     Cancel:'Cancel',
     Ok:'OK',
     timer:49,
+    timerStart:'timerStart'
   
 }
  export default Constants
