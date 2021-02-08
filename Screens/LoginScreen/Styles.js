@@ -3,18 +3,30 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import {Dimensions} from 'react-native';
+
 export default {
    portraitStyles :{
-height:hp('100%'),
-width:wp('100%'),
-padding:'7%'
-   },
+  flex: 1,
+  flexDirection:'column',
+  padding: '7%',
+      
+  },
    
     landscapeStyles :{
-      height:hp('100%'),
-      width:hp('100%'),
-      padding:'7%'
+      flex: 1,
+      flexDirection:'row',
+      padding: '7%',
     },
+    
+    portraitStylesHeights :{
+      height: Dimensions.get('window').height*0.08,
+     
+      },   
+        landscapeStylesHeights :{
+          height: Dimensions.get('window').width*0.08,
+          
+        },
   containerActivity: {
     flex: 1,
     alignItems: 'center',
@@ -25,24 +37,31 @@ padding:'7%'
     margin: '7%',
   },
   loginText: {
-    color: 'black',
+     color: 'black',
      fontSize: RFValue(28),
-   height: hp('15%'),
+     height: Dimensions.get('window').height*0.3
+ 
   },
   inputContainer: {
     height: hp('10%'),
   },
   cacheContainer: {
-    height: hp('7%'),
     flexDirection: 'row',
     alignItems: 'center',
   },
-  forgetPassword: {
-    paddingTop: 40,
+  forgetPasswordPortrait: {
+    marginTop: 30,
     color: 'grey',
     fontSize: RFValue(13),
     alignSelf: 'flex-end',
-    height: hp('9%'),
+    alignItems:'center',
+   
+  },
+  forgetPasswordLandscape: {
+    marginTop: 30,
+    color: 'grey',
+    fontSize: RFValue(13),
+    alignSelf: 'flex-end',
     alignItems:'center',
    
   },
@@ -82,8 +101,8 @@ width:wp('80%')
   },
 
   input: {
-    height: hp('5%'),
-    marginTop: 10,
+    height: Dimensions.get('window').height*0.3,
+    marginTop: 25,
     borderBottomWidth: 2,
     borderBottomColor: 'lightgrey',
   },
@@ -102,7 +121,7 @@ width:wp('80%')
   checkBoxContainer: {
     flexDirection: 'row',
     alignItems:'center',
-    height: hp('7%'),
+    height: Dimensions.get('window').height*0.1
   },
   checkBoxLabel: {
     fontSize: RFValue(13),

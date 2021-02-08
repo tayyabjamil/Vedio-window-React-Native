@@ -1,5 +1,15 @@
 import React, {Component} from 'react';
-import {StyleSheet, View,Image,Text,Alert,TouchableOpacity,SafeAreaView,ActivityIndicator,Dimensions} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  Text,
+  Alert,
+  TouchableOpacity,
+  SafeAreaView,
+  ActivityIndicator,
+  Dimensions,
+} from 'react-native';
 import Styles from './Styles';
 import ButtonConnect from '../../Components/ButtonConnect/ButtonConnect';
 import Validations from '../../Common/Validations';
@@ -9,26 +19,25 @@ import CheckBox from '@react-native-community/checkbox';
 import TextFieldComponent from '../../Components/TextField/textField';
 import * as loginActions from '../../ReduxStore/Actions/loginAction';
 import {connect} from 'react-redux';
-import Utils from '../../Common/Utills'
+import Utils from '../../Common/Utills';
 class LoginScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {  
+    this.state = {
       timer: 49,
       stopTimer: false,
-      screen:Dimensions.get('window'),
-      screenType:''
+      screen: Dimensions.get('window'),
+      screenType: '',
+      screenWidth: Dimensions.get('window').width,
+      screenHeight: Dimensions.get('window').height,
     };
   
   }
-  
 
-   isPortrait = () => {
-    const dim = Dimensions.get('screen');
-    return dim.height >= dim.width;
-  }; 
   async componentDidMount() {
-    console.log(this.state.screenType)
+    Dimensions.addEventListener("change", this.onChange);
+    // this.getOrientation();
+    console.log(this.state.screenType);
     Constant.LocalStore.getItem(Constant.username).then((name) => {
       this.props.storeInputData(name, Constant.username);
     });
@@ -36,10 +45,10 @@ class LoginScreen extends Component {
     Constant.LocalStore.getItem(Constant.password).then((password) => {
       this.props.storeInputData(password, Constant.password);
     });
-   this.counterStart()
+    this.counterStart();
   }
-  counterStart=async()=>{
-
+  counterStart = async () => {
+    Dimensions.removeEventListener('change');
     const autoLogin = await Constant.LocalStore.getItem(Constant.autoLogin);
 
     if (autoLogin == 'true') {
@@ -48,34 +57,48 @@ class LoginScreen extends Component {
         1000,
       );
     }
-  }
+  };
 
   componentDidUpdate() {
-    this.props.clearErrorApi()
-   
+    this.props.clearErrorApi();
+
     if (this.state.stopTimer == true) {
-    
       clearInterval(this.interval);
     }
     if (this.state.timer === 0) {
-     
       clearInterval(this.interval);
-      this.setState({timer:49})
+      this.setState({timer: 49});
       this.handleSubmit();
-    
-      if(this.props.successLoginApi !== Constant.LoggedIn){
-      this.counterStart()
-      }
-  }
- }
- getOrientation(){
-  if (this.state.screen.width > this.state.screen.height){
-    this.setState({screenType:'LANDSCAPE'}) ;
-  }else {
-    this.setState({screenType:'PORTRAIT'})
-  }
-}
 
+      if (this.props.successLoginApi !== Constant.LoggedIn) {
+        this.counterStart();
+      }
+    }
+  }
+  getOrientation() {
+    console.log('get oridenataop');
+    this.setState({
+      screenWidth: Dimensions.get('window').width,
+      screenHeight: Dimensions.get('window').height,
+    });
+    Dimensions.addEventListener('change');
+    console.log(
+      'height' + this.state.screenHeight + 'width' + this.state.screenWidth,
+    );
+  }
+   onChange = ({ window, screen }) => {
+    this.setState({ dimensions: { window, screen } });
+  };
+
+  componentWillUnmount() {
+    Dimensions.removeEventListener("change", this.onChange);
+  
+    // this.setState({
+    //   screenWidth: Dimensions.get('window').height,
+    //   screenHeight: Dimensions.get('window').height,
+    // });
+  }
+  
   isFormFilled() {
     let checkPassword = Validations.checkPassword(this.props.passwordText);
     let checkUsername = Validations.checkUsername(this.props.usernameText);
@@ -101,17 +124,22 @@ class LoginScreen extends Component {
   };
   clearCache = () => {
     this.props.clearCache();
-    Utils.clearCache()
-   };
+    Utils.clearCache();
+  };
   navigateHome = () => {
     this.props.navigation.navigate(Constant.HomeRoute);
   };
   render() {
+    const {screenWidth, screenHeight} = this.state;
     return (
-      <SafeAreaView  onLayout = {this.getOrientation.bind(this)}
-      style={Styles.mainContainer}
-      // style={this.state.screen == 'PORTRAIT' ? Styles.landscapeStyles : Styles. portraitStyles}
-      >
+      <SafeAreaView
+        // onLayout={this.getOrientation.bind(this)}
+        style={Styles.mainContainer}
+        style={
+          screenHeight > screenWidth
+            ? Styles.portraitStyles
+            : Styles.landscapeStyles
+        }>
         {this.props.loading == true && (
           <View style={Styles.containerActivity}>
             <ActivityIndicator size="large" color="grey" />
@@ -119,26 +147,47 @@ class LoginScreen extends Component {
         )}
 
         {this.props.loading == false && (
-         <KeyboardAvoidingScrollView style={{flex:1}}>
-        
-            <Text style={Styles.loginText}>{Constant.LabelVideoWindow}</Text>
+          <KeyboardAvoidingScrollView>
+            <Text
+              style={
+                screenHeight > screenWidth
+                  ? [Styles.loginText,Styles.portraitStylesHeights]
+                  : [Styles.loginText,Styles.landscapeStylesHeights]
+              }>
+              {Constant.LabelVideoWindow}
+            </Text>
+
             <TextFieldComponent
               value={this.props.usernameText}
               type={Constant.username}
               label={Constant.usernameLabel}
-              parentCallBack={(value,type)=>this.props.storeInputData(value,type)}
+              parentCallBack={(value, type) =>
+                this.props.storeInputData(value, type)
+              }
             />
 
             <TextFieldComponent
               value={this.props.passwordText}
               type={Constant.password}
               label={Constant.passwordLabel}
-              parentCallBack={(value,type)=>this.props.storeInputData(value,type)}
+              parentCallBack={(value, type) =>
+                this.props.storeInputData(value, type)
+              }
             />
-            
-            <Text style={Styles.forgetPassword}>{Constant.LabelForgetPassword}</Text>
 
-            <View style={Styles.checkBoxContainer}>
+            <Text style={  screenHeight > screenWidth
+              ? [Styles.forgetPasswordPortrait,Styles.portraitStylesHeights]
+              : [Styles.forgetPasswordLandscape,Styles.landscapeStylesHeights]
+           }>
+              {Constant.LabelForgetPassword}
+            </Text>
+
+            <View
+            style={   screenHeight > screenWidth
+              ? [Styles.checkBoxContainer,Styles.portraitStylesHeights]
+              : [Styles.checkBoxContainer,Styles.landscapeStylesHeights]
+           }
+            >
               <CheckBox
                 style={Styles.checkBox}
                 disabled={false}
@@ -150,10 +199,21 @@ class LoginScreen extends Component {
                   )
                 }
               />
-              <Text style={Styles.checkBoxLabel}>{Constant.LabelRememberLogin}</Text>
+             <TouchableOpacity onPress={()=>this.props.storeCheckBoxData(!this.props.rememberLogin,Constant.rememberLogin)}>
+              <Text style={Styles.checkBoxLabel}>
+                {Constant.LabelRememberLogin}
+              </Text>
+              </TouchableOpacity>
             </View>
 
-            <View style={Styles.checkBoxContainer}>
+            <View 
+            
+            style={
+              screenHeight > screenWidth
+              ? [Styles.checkBoxContainer,Styles.portraitStylesHeights]
+              : [Styles.checkBoxContainer,Styles.landscapeStylesHeights]
+            }
+              >
               <CheckBox
                 style={Styles.checkBox}
                 disabled={false}
@@ -165,32 +225,52 @@ class LoginScreen extends Component {
                   )
                 }
               />
-              <Text style={Styles.checkBoxLabel}> {Constant.LabelAutoLogin} </Text>
+              <TouchableOpacity onPress={()=>this.props.storeCheckBoxData(!this.props.autoLogin,Constant.autoLogin)}>
+            
+              <Text style={Styles.checkBoxLabel}>
+                {Constant.LabelAutoLogin}{' '}
+              </Text>
+              </TouchableOpacity>
             </View>
 
-            <View style={Styles.cacheContainer}>
+            <View style={   screenHeight > screenWidth
+              ? [Styles.cacheContainer,Styles.portraitStylesHeights]
+              : [Styles.cacheContainer,Styles.landscapeStylesHeights]
+           }>
               <TouchableOpacity
                 style={Styles.cacheImage}
                 onPress={() => this.clearCache()}>
                 <Image source={require('../../assets/images/cache.png')} />
               </TouchableOpacity>
-              <Text style={Styles.checkBoxLabel}>{Constant.LabelClearCache}</Text>
+              <Text style={Styles.checkBoxLabel}>
+                {Constant.LabelClearCache}
+              </Text>
             </View>
-            <Text style={Styles.autoLoginText}>
+            <Text style={  
+               screenHeight > screenWidth
+              ? [Styles.autoLoginText,Styles.portraitStylesHeights]
+              : [Styles.autoLoginText,Styles.landscapeStylesHeights]
+           }>
               <Text style={Styles.autologinWidth}>
                 Auto-Login will be triggered in {this.state.timer} seconds,if
-                you would like to connect now then hit connect else </Text>
+                you would like to connect now then hit connect else{' '}
+              </Text>
               <Text
                 style={Styles.underline}
                 onPress={() => this.cancelAutoLogin()}>
-                    Click here </Text>
+                Click here{' '}
+              </Text>
               <Text> to cancel auto login</Text>
             </Text>
-            <ButtonConnect btnLabel={'Connect'}
+            <ButtonConnect
+              btnLabel={'Connect'}
               navigation={this.props.navigation}
               data={this.handleSubmit}
             />
-            <Text style={Styles.noAccountView}>
+            <Text style={  screenHeight > screenWidth
+              ? [Styles.noAccountView,Styles.portraitStylesHeights]
+              : [Styles.noAccountView,Styles.landscapeStylesHeights]
+           }>
               <Text>{Constant.LabelNoAccount}</Text>
               <Text style={Styles.textCreate}>{Constant.LabelCreate}</Text>
             </Text>
@@ -201,14 +281,14 @@ class LoginScreen extends Component {
   }
 }
 
-const mapStateToProps = (state,ownProps) => {
-  if(state.loginReducer.error!==""){
- alert(state.loginReducer.error)
+const mapStateToProps = (state, ownProps) => {
+  if (state.loginReducer.error !== '') {
+    alert(state.loginReducer.error);
   }
-  if(state.loginReducer.success==Constant.LoggedIn){
-    ownProps.navigation.navigate(Constant.HomeRoute)
-   }
- 
+  if (state.loginReducer.success == Constant.LoggedIn) {
+    ownProps.navigation.navigate(Constant.HomeRoute);
+  }
+
   return {
     stopTime: state.loginReducer.stopTime,
     usernameText: state.loginReducer.usernameText,
@@ -219,7 +299,7 @@ const mapStateToProps = (state,ownProps) => {
     rememberLogin: state.loginReducer.rememberLogin,
     autoLogin: state.loginReducer.autoLogin,
   };
- };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -234,10 +314,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
-const portraitStyles = StyleSheet.create({
-  
- });
- 
- const landscapeStyles = StyleSheet.create({
-  
- });
+const portraitStyles = StyleSheet.create({});
+
+const landscapeStyles = StyleSheet.create({});
