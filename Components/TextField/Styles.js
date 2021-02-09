@@ -17,6 +17,7 @@ export default {
     },
     inputContainer:{
         height: Dimensions.get('window').height*0.09,
+        minHeight:Dimensions.get('window').height*0.09,
         marginTop:30,
           },
     input:{

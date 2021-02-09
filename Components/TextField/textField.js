@@ -1,7 +1,6 @@
 import React, { useState ,useEffect} from 'react'
 import { TextInput, View, Image,Text ,TouchableOpacity,Dimensions} from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
-// import Colors from '../../Common/Colors'
 import Styles from './Styles'
 const TextField = props => {
 const[deviceType,setdeviceType]=useState('')

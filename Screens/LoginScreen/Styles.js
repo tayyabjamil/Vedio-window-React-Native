@@ -1,6 +1,6 @@
 import {
   widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
+  heightPercentageToDP as hp, 
 } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import {Dimensions} from 'react-native';
@@ -10,22 +10,23 @@ export default {
   flex: 1,
   flexDirection:'column',
   padding: '7%',
-      
   },
    
     landscapeStyles :{
-      flex: 1,
+      flex: 1,  
       flexDirection:'row',
       padding: '7%',
+    
     },
     
     portraitStylesHeights :{
-      height: Dimensions.get('window').height*0.08,
-     
+      minHeight:hp('8%'),
+      height:'8%',
+    
       },   
         landscapeStylesHeights :{
-          height: Dimensions.get('window').width*0.08,
-          
+          minHeight:hp('20%'),
+          height:'20%',
         },
   containerActivity: {
     flex: 1,
@@ -33,41 +34,45 @@ export default {
     justifyContent: 'center',
   },
   mainContainer: {
-    flex: 1,
+    
     margin: '7%',
   },
   loginText: {
      color: 'black',
      fontSize: RFValue(28),
-     height: Dimensions.get('window').height*0.3
- 
+     minHeight: wp('15%'),
+     height:wp('15%'),
+   
   },
+  
   inputContainer: {
-    height: hp('10%'),
+    height: hp('20%'),
+    
   },
   cacheContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    minHeight:wp('15%'),
+    height:wp('15%')
   },
-  forgetPasswordPortrait: {
-    marginTop: 30,
+  forgetPassword: {
+    paddingTop: 20,
     color: 'grey',
     fontSize: RFValue(13),
     alignSelf: 'flex-end',
-    alignItems:'center',
-   
-  },
-  forgetPasswordLandscape: {
-    marginTop: 30,
-    color: 'grey',
-    fontSize: RFValue(13),
-    alignSelf: 'flex-end',
+    minHeight: '5%',
     alignItems:'center',
    
   },
   autoLoginText: {
-    marginTop: '2%',
-    height: hp('8%'),
+    height:wp('10%'),
+    minHeight:wp('10%'),
+    fontSize: RFValue(13),
+    color: 'grey',
+  },
+  autoLoginText: {
+    height:wp('10%'),
+    minHeight:wp('10%'),
     fontSize: RFValue(13),
     color: 'grey',
   },
@@ -75,11 +80,12 @@ export default {
 width:wp('80%')
   },
   noAccountView:{
-    paddingTop: '4%',
-    height: hp('8%'),
+    
+    paddingTop:15,
+    height: wp('40%'),
     fontSize: RFValue(13),
     color: 'grey',
-  
+   
   },
   clickText: {
     color: 'black',
@@ -101,8 +107,8 @@ width:wp('80%')
   },
 
   input: {
-    height: Dimensions.get('window').height*0.3,
-    marginTop: 25,
+    height: hp('5%'),
+    marginTop: 10,
     borderBottomWidth: 2,
     borderBottomColor: 'lightgrey',
   },
@@ -115,13 +121,13 @@ width:wp('80%')
   loading: {
     width: '10%',
   },
-  bottomContainer: {
-    height: hp('45%'),
-  },
+ 
   checkBoxContainer: {
     flexDirection: 'row',
     alignItems:'center',
-    height: Dimensions.get('window').height*0.1
+    minHeight:('10%'),
+    height:('10%')
+  
   },
   checkBoxLabel: {
     fontSize: RFValue(13),

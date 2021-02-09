@@ -20,6 +20,7 @@ import TextFieldComponent from '../../Components/TextField/textField';
 import * as loginActions from '../../ReduxStore/Actions/loginAction';
 import {connect} from 'react-redux';
 import Utils from '../../Common/Utills';
+import Orientation from 'react-native-orientation';
 class LoginScreen extends Component {
   constructor(props) {
     super(props);
@@ -28,17 +29,16 @@ class LoginScreen extends Component {
       stopTimer: false,
       screen: Dimensions.get('window'),
       screenType: '',
-      screenWidth: Dimensions.get('window').width,
-      screenHeight: Dimensions.get('window').height,
+      screenWidth: 0,
+      screenHeight: 0,
     };
   
   }
+   
 
   async componentDidMount() {
-    Dimensions.addEventListener("change", this.onChange);
-    // this.getOrientation();
-    console.log(this.state.screenType);
-    Constant.LocalStore.getItem(Constant.username).then((name) => {
+     Orientation.addOrientationListener(this._orientationDidChange);
+   Constant.LocalStore.getItem(Constant.username).then((name) => {
       this.props.storeInputData(name, Constant.username);
     });
 
@@ -47,8 +47,17 @@ class LoginScreen extends Component {
     });
     this.counterStart();
   }
+  _orientationDidChange = (orientation) => {
+ 
+   
+    if (orientation === 'PORTRAIT') {
+      this.setState({screenType:orientation})
+      } else if(orientation == 'LANDSCAPE'){
+        this.setState({screenType:orientation})
+      }
+    }
+
   counterStart = async () => {
-    Dimensions.removeEventListener('change');
     const autoLogin = await Constant.LocalStore.getItem(Constant.autoLogin);
 
     if (autoLogin == 'true') {
@@ -58,7 +67,20 @@ class LoginScreen extends Component {
       );
     }
   };
-
+ componentWillMount() {
+   
+    const initial = Orientation.getInitialOrientation();
+    if (initial === 'PORTRAIT') {
+    this.setState({screenType:initial})
+    
+  } else if(initial == 'LANDSCAPE'){
+   
+    this.setState({screenType:initial})
+    
+  }
+  console.log(this.state.screenType)
+  }
+  
   componentDidUpdate() {
     this.props.clearErrorApi();
 
@@ -90,14 +112,6 @@ class LoginScreen extends Component {
     this.setState({ dimensions: { window, screen } });
   };
 
-  componentWillUnmount() {
-    Dimensions.removeEventListener("change", this.onChange);
-  
-    // this.setState({
-    //   screenWidth: Dimensions.get('window').height,
-    //   screenHeight: Dimensions.get('window').height,
-    // });
-  }
   
   isFormFilled() {
     let checkPassword = Validations.checkPassword(this.props.passwordText);
@@ -125,21 +139,18 @@ class LoginScreen extends Component {
   clearCache = () => {
     this.props.clearCache();
     Utils.clearCache();
-  };
+  }; 
   navigateHome = () => {
     this.props.navigation.navigate(Constant.HomeRoute);
   };
   render() {
-    const {screenWidth, screenHeight} = this.state;
     return (
       <SafeAreaView
-        // onLayout={this.getOrientation.bind(this)}
-        style={Styles.mainContainer}
+        // onLayout={this.removeListener.bind(this)}
+        // style={Styles.mainContainer}
         style={
-          screenHeight > screenWidth
-            ? Styles.portraitStyles
-            : Styles.landscapeStyles
-        }>
+          this.state.screenType == 'PORTRAIT' ? Styles.portraitStyles  : Styles.landscapeStyles
+        }> 
         {this.props.loading == true && (
           <View style={Styles.containerActivity}>
             <ActivityIndicator size="large" color="grey" />
@@ -149,11 +160,8 @@ class LoginScreen extends Component {
         {this.props.loading == false && (
           <KeyboardAvoidingScrollView>
             <Text
-              style={
-                screenHeight > screenWidth
-                  ? [Styles.loginText,Styles.portraitStylesHeights]
-                  : [Styles.loginText,Styles.landscapeStylesHeights]
-              }>
+              style={Styles.loginText
+       }>
               {Constant.LabelVideoWindow}
             </Text>
 
@@ -175,19 +183,13 @@ class LoginScreen extends Component {
               }
             />
 
-            <Text style={  screenHeight > screenWidth
-              ? [Styles.forgetPasswordPortrait,Styles.portraitStylesHeights]
-              : [Styles.forgetPasswordLandscape,Styles.landscapeStylesHeights]
-           }>
+            <Text style={Styles.forgetPassword}>
               {Constant.LabelForgetPassword}
             </Text>
 
             <View
-            style={   screenHeight > screenWidth
-              ? [Styles.checkBoxContainer,Styles.portraitStylesHeights]
-              : [Styles.checkBoxContainer,Styles.landscapeStylesHeights]
-           }
-            >
+        style={Styles.checkBoxContainer}
+                  >
               <CheckBox
                 style={Styles.checkBox}
                 disabled={false}
@@ -199,21 +201,15 @@ class LoginScreen extends Component {
                   )
                 }
               />
-             <TouchableOpacity onPress={()=>this.props.storeCheckBoxData(!this.props.rememberLogin,Constant.rememberLogin)}>
               <Text style={Styles.checkBoxLabel}>
                 {Constant.LabelRememberLogin}
               </Text>
-              </TouchableOpacity>
             </View>
 
             <View 
             
-            style={
-              screenHeight > screenWidth
-              ? [Styles.checkBoxContainer,Styles.portraitStylesHeights]
-              : [Styles.checkBoxContainer,Styles.landscapeStylesHeights]
-            }
-              >
+            style={Styles.checkBoxContainer}
+            >
               <CheckBox
                 style={Styles.checkBox}
                 disabled={false}
@@ -225,18 +221,15 @@ class LoginScreen extends Component {
                   )
                 }
               />
-              <TouchableOpacity onPress={()=>this.props.storeCheckBoxData(!this.props.autoLogin,Constant.autoLogin)}>
-            
               <Text style={Styles.checkBoxLabel}>
+              
                 {Constant.LabelAutoLogin}{' '}
               </Text>
-              </TouchableOpacity>
             </View>
 
-            <View style={   screenHeight > screenWidth
-              ? [Styles.cacheContainer,Styles.portraitStylesHeights]
-              : [Styles.cacheContainer,Styles.landscapeStylesHeights]
-           }>
+            <View
+            style={Styles.checkBoxContainer}
+            >
               <TouchableOpacity
                 style={Styles.cacheImage}
                 onPress={() => this.clearCache()}>
@@ -247,10 +240,7 @@ class LoginScreen extends Component {
               </Text>
             </View>
             <Text style={  
-               screenHeight > screenWidth
-              ? [Styles.autoLoginText,Styles.portraitStylesHeights]
-              : [Styles.autoLoginText,Styles.landscapeStylesHeights]
-           }>
+               Styles.autoLoginText}>
               <Text style={Styles.autologinWidth}>
                 Auto-Login will be triggered in {this.state.timer} seconds,if
                 you would like to connect now then hit connect else{' '}
@@ -267,10 +257,7 @@ class LoginScreen extends Component {
               navigation={this.props.navigation}
               data={this.handleSubmit}
             />
-            <Text style={  screenHeight > screenWidth
-              ? [Styles.noAccountView,Styles.portraitStylesHeights]
-              : [Styles.noAccountView,Styles.landscapeStylesHeights]
-           }>
+            <Text style={ Styles.noAccountView }>
               <Text>{Constant.LabelNoAccount}</Text>
               <Text style={Styles.textCreate}>{Constant.LabelCreate}</Text>
             </Text>

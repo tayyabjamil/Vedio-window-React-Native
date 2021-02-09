@@ -10,6 +10,8 @@ target 'vedioWindow' do
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
+  pod 'react-native-orientation', :path => '../node_modules/react-native-orientation'
+
   target 'vedioWindowTests' do
     inherit! :complete
     # Pods for testing
